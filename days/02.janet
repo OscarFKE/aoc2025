@@ -31,12 +31,12 @@
   (let [input (file/read f :all) product-id-ranges (peg/match product-id-range-grammar input)]
     (->>
       (iterate-product-id-ranges product-id-ranges)
-      (filter is-id-part1-valid?)
+      (filter is-id-part1-invalid?)
       (sum)
       (printf "day 01 part 1: %d"))
 
     (->>
       (iterate-product-id-ranges product-id-ranges)
-      (filter is-id-part2-valid?)
+      (filter is-id-part2-invalid?)
       (sum)
       (printf "day 01 part 2: %d"))))
