@@ -2,14 +2,14 @@
 
 (defn- make-right [rotation-str] (scan-number rotation-str))
 
-(def lock-rotation-grammar (peg/compile
+(def- lock-rotation-grammar (peg/compile
   ~{:main (some :rotation)
     :rotation (* (+ :left :right) :newline?)
     :left (* "L" (/ (<- :d+) ,make-left))
     :right (* "R" (/ (<- :d+) ,make-right))
     :newline? (? "\n")}))
 
-(defn normalize-dial-position [dial-position]
+(defn- normalize-dial-position [dial-position]
   (% (if (pos? dial-position) dial-position (- 100 (% (math/abs dial-position) 100))) 100))
 
 (defn- apply-rotations [starting-position rotations]
