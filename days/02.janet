@@ -5,7 +5,7 @@
     :product-range (* (/ (* :product-id "-" :product-id) ,make-range) (? ","))
     :product-id (/ (<- :d+) ,scan-number)}))
 
-(defn- is-id-part1-valid? [id]
+(defn- is-id-part1-invalid? [id]
   (let [id-str (string id) id-str-len (length id-str)]
     (and 
       (even? id-str-len) 
@@ -20,7 +20,7 @@
   [;(seq [i :range [0 (div (length str) chunk-size)]] 
       (string/slice str (* i chunk-size) (* (+ i 1) chunk-size)))])
 
-(defn- is-id-part2-valid? [id]
+(defn- is-id-part2-invalid? [id]
   (let [id-str (string id) id-str-len (length id-str)]
     (any? (map |(apply = (chunk id-str $0)) (find-divisors id-str-len)))))
 
