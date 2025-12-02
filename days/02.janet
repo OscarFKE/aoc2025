@@ -4,7 +4,7 @@
 
 (def product-id-range-grammar (peg/compile 
   ~{:main (* (some :product-range) "\n")
-    :product-range (* (/ (* :product-id "-" :product-id) ,make-tuple) (? ","))
+    :product-range (* (/ (* :product-id "-" :product-id) ,make-range) (? ","))
     :product-id (/ (<- :d+) ,scan-number)}))
 
 (defn is-id-part1-valid? [id]
@@ -29,12 +29,11 @@
 (defn- iterate-product-id-ranges [product-id-ranges]
   (fiber/new 
     (fn :product-id-range-iterator [] 
-      (loop [id-range :in product-id-ranges id :range-to [(get id-range 0) (get id-range 1)]]
+      (loop [id-range :in product-id-ranges id :range-to [(id-range :from) (id-range :to)]]
         (yield id)))))
 
 (with [f (file/open (get (dyn :args) 1))]
   (let [input (file/read f :all) product-id-ranges (peg/match product-id-range-grammar input)]
-
     (->>
       (iterate-product-id-ranges product-id-ranges)
       (filter is-id-part1-valid?)
@@ -45,6 +44,4 @@
       (iterate-product-id-ranges product-id-ranges)
       (filter is-id-part2-valid?)
       (sum)
-      (printf "day 01 part 2: %d"))
-
-    ))
+      (printf "day 01 part 2: %d"))))
